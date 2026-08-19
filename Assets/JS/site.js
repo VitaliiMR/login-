@@ -1,8 +1,18 @@
-const correctUsername = "admin";
-const correctPassword = "1234";
+const correctUsername = "Vitalii";
+const correctPassword = "676767";
 
 function checkLogin(username, password) {
     return username === correctUsername && password === correctPassword;
+}
+
+function login(username, password) {
+    if (checkLogin(username, password)) {
+        document.cookie = "loggedIn=true; max-age=86400; path=/";
+        return true;
+    }
+
+    showLoginScreen();
+    return false;
 }
 
 function createLoginForm() {
@@ -57,7 +67,7 @@ function createLoginForm() {
         const username = usernameInput.value;
         const password = passwordInput.value;
 
-        if (checkLogin(username, password)) {
+        if (login(username, password)) {
             message.textContent = "Login successful.";
             message.className = "success";
         } else {
@@ -65,6 +75,12 @@ function createLoginForm() {
             message.className = "error";
         }
     });
+}
+
+function showLoginScreen() {
+    if (!document.getElementById("login-form")) {
+        createLoginForm();
+    }
 }
 
 createLoginForm();
