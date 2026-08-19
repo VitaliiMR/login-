@@ -7,7 +7,7 @@ function checkLogin(username, password) {
 
 function login(username, password) {
     if (checkLogin(username, password)) {
-        document.cookie = "loggedIn=true; max-age=86400; path=/";
+        document.cookie = "loggedIn=true; max-age=10; path=/";
         return true;
     }
 
@@ -15,9 +15,8 @@ function login(username, password) {
     return false;
 }
 
-function createLoginForm() {
-    const main = document.createElement("main");
-
+function createLoginScreen() {
+    const app = document.getElementById("app");
     const form = document.createElement("form");
 
     const usernameLabel = document.createElement("label");
@@ -58,8 +57,7 @@ function createLoginForm() {
         submitButton,
         message
     );
-    main.append(form);
-    document.body.append(main);
+    app.append(form);
 
     form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -79,9 +77,32 @@ function createLoginForm() {
 
 function showLoginScreen() {
     if (!document.getElementById("login-form")) {
-        createLoginForm();
+        createLoginScreen();
     }
 }
 
-createLoginForm();
+function createApp() {
+    const app = document.getElementById("app");
+    const main = document.createElement("main");
+    const heading = document.createElement("h1");
+
+    heading.textContent = "Du er logget ind";
+    main.append(heading);
+    app.replaceChildren(main);
+}
+
+function initializeApp() {
+    const cookies = document.cookie.split("; ");
+    const hasLoginCookie = cookies.some(function (cookie) {
+        return cookie === "loggedIn=true";
+    });
+
+    if (hasLoginCookie) {
+        createApp();
+    } else {
+        createLoginScreen();
+    }
+}
+
+initializeApp();
 
